@@ -25,8 +25,7 @@ def cannonreverse(cannonposition,cannonreversedelay):
 
 def timeprocess(irsensor,exittime):
     tic = time.time()
-    print('***',exittime)
-    
+    print(exittime)
     while GPIO.input(irsensor)==0 and time.time()-tic<exittime:
         pass
     toc=time.time()
@@ -35,11 +34,26 @@ def timeprocess(irsensor,exittime):
     total = toc - tic
     print("Time from start to immersion:", total)
 
-        
-def applysample(cannon,wait,duration):
-    time.sleep(wait)
+def mixsample(cannon,mix,mixwait):
     GPIO.output(cannon,GPIO.HIGH)
-    time.sleep(duration)
+    time.sleep(mix)
+    print("mixing1")
+    GPIO.output(cannon,GPIO.LOW)
+    time.sleep(mixwait)
+    
+def applysample(cannon,spraywait,spray):
+    #if mix != 0:
+    #    print ('xxx')
+    #if (mix or mixwait) != 0:
+    #    GPIO.output(cannon,GPIO.HIGH)
+    #    time.sleep(mix)
+    #    #print("mixing")
+    #    GPIO.output(cannon,GPIO.LOW)
+    #    time.sleep(mixwait)
+    #    #print("waiting")
+    time.sleep(spraywait)
+    GPIO.output(cannon,GPIO.HIGH)
+    time.sleep(spray)
     GPIO.output(cannon,GPIO.LOW)
     
 def releaseplunger(plunger,wait):
@@ -55,6 +69,9 @@ def readenvironment(dht22):
     
 if __name__=='__main__':
     parser = argparse.ArgumentParser(description='Arguments for BIUcontrol')
+
+    parser.add_argument('--mtime',      help='Duration of sample mixing (seconds)',default = 0, type=float,required=False)
+    parser.add_argument('--mdelay',     help='Time to wait after mixing (seconds)',default = 0, type=float,required=False)
     parser.add_argument('--stime',      help='Duration of sample application (seconds)',type=float,required=True)
     parser.add_argument('--sdelay',     help='Time to wait before applying (seconds)',default = 0, type=float,required=False)
     parser.add_argument('--pdelay',     help='Time to wait before plunging (seconds)',default = 0, type=float,required=False)
@@ -102,7 +119,12 @@ if __name__=='__main__':
     else:
         print("Safety interlock pass: cryogen container is in place")
 
-    # set up processes
+    # Mix sample if requested
+    if args.mtime or args.mdelay !=0:
+        print("mixing")
+        mixsample(pin.cannon,args.mtime,args.mdelay)
+        
+    # set up parallel processes
     sample = threading.Thread(target=applysample, args=(pin.cannon,args.sdelay,args.stime))  
     plunger = threading.Thread(target=releaseplunger, args=(pin.plunger,args.pdelay))  
     cannonposition = threading.Thread(target=cannonreverse, args=(pin.cannonposition,cannonreversedelay))
