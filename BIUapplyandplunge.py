@@ -29,7 +29,6 @@ def timeprocess(irsensor,exittime):
     while GPIO.input(irsensor)==0 and time.time()-tic<exittime:
         pass
     toc=time.time()
-
     #print GPIO.input(pin.irsensor)
     total = toc - tic
     print("Time from start to immersion:", total)
@@ -37,20 +36,10 @@ def timeprocess(irsensor,exittime):
 def mixsample(cannon,mix,mixwait):
     GPIO.output(cannon,GPIO.HIGH)
     time.sleep(mix)
-    print("mixing1")
     GPIO.output(cannon,GPIO.LOW)
     time.sleep(mixwait)
     
 def applysample(cannon,spraywait,spray):
-    #if mix != 0:
-    #    print ('xxx')
-    #if (mix or mixwait) != 0:
-    #    GPIO.output(cannon,GPIO.HIGH)
-    #    time.sleep(mix)
-    #    #print("mixing")
-    #    GPIO.output(cannon,GPIO.LOW)
-    #    time.sleep(mixwait)
-    #    #print("waiting")
     time.sleep(spraywait)
     GPIO.output(cannon,GPIO.HIGH)
     time.sleep(spray)
