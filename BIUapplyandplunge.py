@@ -23,17 +23,16 @@ def cannonreverse(cannonposition,cannonreversedelay):
     print("reversing the cannon")
     GPIO.output(cannonposition,GPIO.LOW)
 
-def timeprocess(irsensor,exittime):
-    tic = time.time()
-    print('***',exittime)
-    
-    while GPIO.input(irsensor)==0 and time.time()-tic<exittime:
-        pass
-    toc=time.time()
-
-    #print GPIO.input(pin.irsensor)
-    total = toc - tic
-    print("Time from start to immersion:", total)
+#def timeprocess(irsensor,exittime):
+#    tic = time.time()
+#    print('***',exittime)
+#    
+#    while GPIO.input(irsensor)==0 and time.time()-tic<exittime:
+#        pass
+#    toc=time.time()
+#    #print GPIO.input(pin.irsensor)
+#    total = toc - tic
+#    print("Time from start to immersion:", total)
 
         
 def applysample(cannon,wait,duration):
@@ -74,7 +73,7 @@ if __name__=='__main__':
     GPIO.setup(pin.plunger,GPIO.OUT)
     GPIO.setup(pin.cannonposition,GPIO.OUT)
     GPIO.setup(pin.sensorpower,GPIO.OUT)
-    GPIO.setup(pin.irsensor,GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
+    #GPIO.setup(pin.pedalsensor,GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
     GPIO.setup(pin.interlock,GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
         
     # Report environmental conditions
@@ -106,7 +105,7 @@ if __name__=='__main__':
     sample = threading.Thread(target=applysample, args=(pin.cannon,args.sdelay,args.stime))  
     plunger = threading.Thread(target=releaseplunger, args=(pin.plunger,args.pdelay))  
     cannonposition = threading.Thread(target=cannonreverse, args=(pin.cannonposition,cannonreversedelay))
-    clockit = threading.Thread(target=timeprocess, args=(pin.irsensor,exittime))
+    #clockit = threading.Thread(target=timeprocess, args=(pin.irsensor,exittime))
     
     # start processes
     if not args.donotplunge:
@@ -114,7 +113,6 @@ if __name__=='__main__':
         
     sample.start()  
     cannonposition.start()
-    clockit.start()
     
     # Kuhnke plunger
     time.sleep(kuhnketime+args.pdelay+args.sdelay)

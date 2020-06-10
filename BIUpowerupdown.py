@@ -33,7 +33,7 @@ if __name__=='__main__':
     GPIO.setup(pin.cannonposition,GPIO.OUT)
     GPIO.setup(pin.sensorpower,GPIO.OUT)
     GPIO.setup(pin.sensorpower,GPIO.OUT)
-    GPIO.setup(pin.irsensor,GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
+    GPIO.setup(pin.pedalsensor,GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
     GPIO.setup(pin.interlock,GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
     
     if args.updown == 'up':

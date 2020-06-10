@@ -2,6 +2,8 @@
 
 from guizero import App, TextBox, Text, PushButton, CheckBox
 from subprocess import call, Popen
+import RPi.GPIO as GPIO
+import BIUpinlist as pin
 
 def startprocess():
     print("starting process")
@@ -36,6 +38,13 @@ def cleanprocess():
     Popen(arguments)
     #call(["python3","cleancontrol.py","--stime",stime,"--cycles",cycles])
 
+def pedal():
+    GPIO.setup(pin.pedalsensor,GPIO.IN, pull_up_down = GPIO.PUD_UP)
+    if button_start.enabled and GPIO.input(pin.pedalsensor)==0:
+        print("Pedal triggered")
+        startprocess()
+
+    
 app = App(title="Shake-it-off", layout="grid")
 stimelabel  = Text(app, text="Spray time (msec)", grid=[0,1])
 stime       = TextBox(app, grid=[1,1], text="30")
@@ -57,4 +66,9 @@ cleantimelabel   = Text(app, text="Cleaning pulse (msec)", grid=[3,2])
 cleantime        = TextBox(app, text="200",grid=[4,2]) 
 clean            = PushButton(app, command=cleanprocess, text="Clean", grid=[3,5])
 
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BCM)
+app.repeat(100,pedal)
 app.display()
+
+
