@@ -7,10 +7,10 @@ import BIUpinlist as pin
 
 def startprocess():
     print("starting process")
-    spraytime = str(float(stime.value)/1000)
-    plungedelay = str(float(pdelay.value)/1000)
-    spraydelay  = str(float(sdelay.value)/1000)
-    arguments = ["python3","BIUapplyandplunge.py","--stime",spraytime,"--pdelay",plungedelay,"--sdelay",spraydelay]
+    spraytime        = str(float(stime.value)/1000)
+    retractiondelay  = str(float(rdelay.value)/1000)
+    plungedelay      = str(float(pdelay.value)/1000)
+    arguments = ["python3","BIUapplyandplunge.py","--stime",spraytime,"--rdelay",retractiondelay,"--pdelay",plungedelay]
     if donotplunge.value==1:
         arguments.append("--donotplunge")
     call(arguments)
@@ -48,10 +48,14 @@ def pedal():
 app = App(title="Shake-it-off", layout="grid")
 stimelabel  = Text(app, text="Spray time (msec)", grid=[0,1])
 stime       = TextBox(app, grid=[1,1], text="30")
-pdelaylabel = Text(app, text="Plunge delay (msec)", grid=[0,2])
-pdelay      = TextBox(app, grid=[1,2], text="45")
-sdelaylabel = Text(app, text="Spray delay (msec)", grid=[0,3])
-sdelay      = TextBox(app, grid=[1,3], text="0")
+rdelaylabel = Text(app, text="Retraction delay (msec)", grid=[0,2])
+rdelay      = TextBox(app, grid=[1,2], text="50")
+pdelaylabel = Text(app, text="Plunge delay (msec)", grid=[0,3])
+pdelay      = TextBox(app, grid=[1,3], text="50")
+
+
+
+
 donotplunge = CheckBox(app, text="Do not plunge", grid=[0,4])
 button_up   = PushButton(app, command=powerup,text="Ready", grid=[0,5])
 button_down = PushButton(app, command=powerdown, text="Abort", grid=[1,5])
