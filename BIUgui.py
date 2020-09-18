@@ -45,7 +45,7 @@ def pedal():
         startprocess()
 
     
-app = App(title="Shake-it-off", layout="grid")
+app = App(title="Back-it-up", layout="grid")
 stimelabel  = Text(app, text="Spray time (msec)", grid=[0,1])
 stime       = TextBox(app, grid=[1,1], text="30")
 rdelaylabel = Text(app, text="Retraction delay (msec)", grid=[0,2])
