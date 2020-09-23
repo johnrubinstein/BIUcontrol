@@ -107,7 +107,7 @@ if __name__=='__main__':
     time.sleep(kuhnketime+args.pdelay)
     resetplunger(pin.plunger)
     if max(args.stime,args.pdelay,args.rdelay) != args.pdelay:
-        sleep(1+max(args.stime,args.rdelay)-args.pdelay)
+        time.sleep(1+max(args.stime,args.rdelay)-args.pdelay)
     powerdownsensors(pin.sensorpower)
 
     GPIO.cleanup()
